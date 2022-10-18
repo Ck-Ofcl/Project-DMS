@@ -34,7 +34,6 @@ if c == "y":
 
 
     def row_add(dct,team,tup):
-        # temp = []
         score = 0
         for index in team:
             score += players_score[index][3]
@@ -50,7 +49,7 @@ if c == "y":
                 row_add(teams_list, i, j)
 
     df = pd.DataFrame(teams_list)
-    df.to_csv(r"C:\Users\chira\PycharmProjects\Dream11_Agam_Gupta\Output Files\CSV\Random_{}.csv".format(random_filename))
+    df.to_csv(r"C:\Users\chira\PycharmProjects\Dream11_Agam_Gupta\Output Files\CSV\{}".format(random_filename))
     print('Calculated scores for random teams.\n')
 
 else:

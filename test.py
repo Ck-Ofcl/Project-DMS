@@ -27,9 +27,14 @@
 #         self.name = name
 #         self.r, self.b,self.fours,self.sixes,self.sr,self.thirt,self.fif,self.cent,self.o,self.M,self.w,self.eco,self.bwl,self.dro,self.rro,self.ca = [0]*16
 #
-#
-#
-#
-a = '2.67'
-b = float(a)
-print(b,2.0>=2)
+import pickle
+with open(r"C:\Users\chira\PycharmProjects\Dream11_Agam_Gupta\Output Files\Players score Dict\INDvsPAK_GR", "rb") as myFile:
+            players_score = pickle.load(myFile)
+            print(players_score)
+            myFile.close()
+a = 'er4 567t,  '
+a = a.rstrip()
+a = a[:-1]
+# a = '2.67'
+# b = float(a)
+print(a,len(a))

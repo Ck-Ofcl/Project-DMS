@@ -8,15 +8,10 @@ real_filename = input("Enter a file name for real teams csv.\n")
 c = input("Do you want to build the real teams' csv again?\n")
 
 if c == "y":
-
-    with open(r'C:\Users\chira\PycharmProjects\Dream11_Agam_Gupta\Output Files\Players score Dict\CodeNameToScr', "rb") as Dcty:
-        CodeNameToScr = pickle.load(Dcty)
-        Dcty.close()
-
+    b = input("Enter tha name for the dictionary.\n")
     pdf_csv = input('Enter the csv name for real teams pdf.\n')
     d = input('Do you want to read pdf again?\n')
     if d == 'y':
-        b = input("Enter tha name for the dictionary.\n")
         with open(r"C:\Users\chira\PycharmProjects\Dream11_Agam_Gupta\Output Files\Players score Dict\{}".format(b), "rb") as myFile:
             players_score = pickle.load(myFile)
             myFile.close()
@@ -44,20 +39,40 @@ if c == "y":
                     try:
                         temp = re.findall('[A-Z][^A-Z]*', temp[1])
                         players = []
-                        if len(temp) == 23:
-                            y = 0
-                            while y < 23:
-                                if temp[y] == "Brine":
-                                    players[(y//2)-1] += "Brine"
-                                    y += 1
-                                else:
-                                    players.append(temp[y]+temp[y+1])
-                                    y += 2
-                        else:
-                            for j in range(0,22,2):
-                                players.append(temp[j]+temp[j+1])
 
-                        entry = [players_score[players[i]][4] for i in range(11)]
+                        ############# customized for INd vd Ire ################
+                        # if len(temp) == 23:
+                        #     y = 0
+                        #     while y < 23:
+                        #         if temp[y] == "Brine":
+                        #             players[(y//2)-1] += "Brine"
+                        #             y += 1
+                        #         else:
+                        #             players.append(temp[y]+temp[y+1])
+                        #             y += 2
+                        # else:
+                        #     for j in range(0,22,2):
+                        #         players.append(temp[j]+temp[j+1])
+                        ############# customized for INd vd Ire ################
+
+                        ############ for IND vs PAK #############
+                        for j in range(0,22,2):
+                            if temp[j].find('Lokesh') != -1:
+                                temp[j] = 'KL '
+                                players.append(temp[j]+temp[j+1])
+                            elif temp[j].find('Iftikhar') != -1:
+                                temp[j] = 'Iftikhar '
+                                players.append(temp[j]+temp[j+1])
+                            else:
+                                players.append(temp[j]+temp[j+1])
+                        ############ for IND vs PAK #############
+
+                        entry = []
+                        for i in range(11):
+                            if players[i] in players_score:         ### Fixed the error of players not in playing 11 but in real team's player list
+                                entry.append(players_score[players[i]][4])
+                            else:
+                                entry.append('x')
                         writer.writerow(entry)
                     except :
                         pass
@@ -65,19 +80,29 @@ if c == "y":
             f.close()
             print('Pdf is read successfully.\n')
 
+    with open(r'C:\Users\chira\PycharmProjects\Dream11_Agam_Gupta\Output Files\Players score Dict\{}CodeNameToScr'.format(b), "rb") as Dcty:
+        CodeNameToScr = pickle.load(Dcty)
+        Dcty.close()
+
     teams_list = {"Score": []}
-    with open(r'C:\Users\chira\PycharmProjects\Dream11_Agam_Gupta\Output Files\CSV\RealTeams{}.csv'.format(pdf_csv),'r') as file:
+    with open(r'C:\Users\chira\PycharmProjects\Dream11_Agam_Gupta\Output Files\CSV\{}'.format(pdf_csv),'r') as file:
         df = pd.read_csv(file)
         for index,row in df.iterrows():
             score = 0
             for j in range(11):
-                score += CodeNameToScr[row[df.columns[j]]]
-            score += CodeNameToScr[row[df.columns[0]]] + 0.5*CodeNameToScr[row[df.columns[1]]]
+                if row[df.columns[j]] == 'x':
+                    score += 0
+                else:
+                    score += CodeNameToScr[row[df.columns[j]]]
+            t0,t1 = row[df.columns[0]],row[df.columns[1]]
+            if t0 != 'x': score += CodeNameToScr[t0]
+            if t1 != 'x': score += 0.5*CodeNameToScr[t1]
+
             teams_list['Score'].append(score)
         file.close()
 
     df = pd.DataFrame(teams_list)
-    df.to_csv(r"C:\Users\chira\PycharmProjects\Dream11_Agam_Gupta\Output Files\CSV\Real_{}.csv".format(real_filename))
+    df.to_csv(r"C:\Users\chira\PycharmProjects\Dream11_Agam_Gupta\Output Files\CSV\{}".format(real_filename))
     print('Calculated scores for real teams.\n')
 
 else:

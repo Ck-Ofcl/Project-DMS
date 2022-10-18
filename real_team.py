@@ -32,6 +32,7 @@ if c == "y":
             try:
                 temp = re.findall('[A-Z][^A-Z]*', temp[1])
                 players = []
+                ############### Customized for IND vs IRE #####################
                 if len(temp) == 23:
                     y = 0
                     while y < 23:
@@ -41,6 +42,7 @@ if c == "y":
                         else:
                             players.append(temp[y]+temp[y+1])
                             y += 2
+                ############### Customized for IND vs IRE #####################
                 else:
                     for j in range(0,22,2):
                         players.append(temp[j]+temp[j+1])

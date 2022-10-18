@@ -1,50 +1,10 @@
-# from bs4 import BeautifulSoup
-# import requests
-# req = requests.get(url)
-# soup = BeautifulSoup(req.content, 'lxml')
 import pandas as pd
 from selenium import webdriver
-import time
+from selenium.webdriver.common.by import By
 import pickle
 
-from selenium.webdriver.common.by import By
-
-driver = webdriver.Chrome('.\chromedriver.exe')
-url3 = 'https://www.espncricinfo.com/series/caribbean-premier-league-2022-1320379/barbados-royals-vs-jamaica-tallawahs-14th-match-1323157/full-scorecard' ####### No mintes in battins stats
-url2 = 'https://www.espncricinfo.com/series/new-zealand-in-australia-2022-1317459/australia-vs-new-zealand-3rd-odi-1317481/full-scorecard'
-url1 = 'https://www.espncricinfo.com/series/india-in-zimbabwe-2022-1325547/zimbabwe-vs-india-3rd-odi-1325551/full-scorecard' ###### wicketkeeper skipper
-url4 = 'https://www.espncricinfo.com/series/asia-cup-2022-1327237/hong-kong-vs-india-4th-match-group-a-1327272/full-scorecard'
-url5 = 'https://www.espncricinfo.com/series/indian-premier-league-2022-1298423/gujarat-titans-vs-mumbai-indians-51st-match-1304097/full-scorecard'
-url6 = 'https://www.espncricinfo.com/series/india-in-ireland-2022-1303299/ireland-vs-india-1st-t20i-1303307/full-scorecard' ###### IND VS IRE ########
-driver.get(url6)
-# time.sleep(1)
-
-tab = driver.find_elements(By.TAG_NAME,'tbody')
-entries  = []
-for j in range(4):
-    entries.append(tab[j].find_elements(By.TAG_NAME,'tr'))
-# entry = tab[1].find_elements(By.TAG_NAME,'tr')
-# for i in range(len(entries)):
-#     print(entries[i])
-#     for k in entries[i]:
-#         print(k.text)
-#         print('//////////////////////break //////////////')
-# print(entry[0].text)
-# st = []
-# for i in range(4):
-#     st[i] = tab[i].text
-#     print(tab[i].text)
-#     print('/////////////////////////////////////////////////////////////////////////////////')
-# for i in entry:
-#     head = i.find_element(By.TAG_NAME,'th').text
-#     print(head)
-# for i in bat_entry:
-#     print(i.text)
-# print(len(bat_entry))
-# tables = driver.find_elements(By.CLASS_NAME,'ds-table-row-compact-bottom ds-border-none')
-# print(tables)
-
 ################################  Player Class  ############################################
+
 
 class player:
 
@@ -89,36 +49,34 @@ class player:
         return score
 
 
-
 ########################## Script Patcher####################################
 
-# for i in range(len(entries)):
-#     for k in entries[i]:
-#         print(k.text)
-#         print('//////////////////////break //////////////')
+def webParser(url):
+    driver = webdriver.Chrome('.\chromedriver.exe')
+    driver.get(url)
+    tab = driver.find_elements(By.TAG_NAME,'tbody')
+    entries = []
+    for j in range(4):
+        entries.append(tab[j].find_elements(By.TAG_NAME,'tr'))
+    res = []
+    for p in range(4):
+        arr = []
+        for i in entries[p]:
+            temp = i.text.split('\n')
+            for j in temp:
+                if j == '':
+                    pass
+                elif j == ', ' or j == ' ':
+                    pass
+                else:
+                    arr.append(j)
+        res.append(arr)
 
+    driver.close()
+    driver.quit()
+    return res
 
-
-
-def BatParser(inn):
-    arr = []
-    for i in entries[inn]:
-        temp = i.text.split('\n')
-        for j in temp:
-            if j == '':
-                pass
-            elif j == ', ' or j == ' ':
-                pass
-            else:
-                arr.append(j)
-    return arr
-
-
-array = [BatParser(i) for i in range(4)]
-
-driver.close()
-driver.quit()
-# print(array)
+########################## Script Patcher####################################
 
 
 def Batting(A,dt,res):
@@ -249,6 +207,9 @@ def Batting(A,dt,res):
                         a = A[i][:s-1]
                     if wt != -1:
                         a = A[i][:wt-1]
+                a = a.rstrip()
+                if a[-1] == ',':
+                    a = a[:-1]
                 if a not in dt:
                     dt[a] = player(a)
                 mark = a
@@ -270,15 +231,13 @@ def Batting(A,dt,res):
                     A[c] = A[c][:s-1]
                 if wt != -1:
                     A[c] = A[c][:wt-1]
+            A[c] = A[c].rstrip()            # to remove the error of the , and whitespaces at the end of the players name resulting in turn the duplicate of the player entries in dictionary.
+            if A[c][-1] == ',':
+                A[c] = A[c][:-1]
             if A[c] not in dt:
                 dt[A[c]] = player(A[c])
             c += 1
 
-# Batting(array)
-# for i in dt:
-#     print(dt[i].name+'#')
-#
-# print(res)
 
 def Balling(B,dt):
     mark = ''
@@ -297,6 +256,9 @@ def Balling(B,dt):
                     a = B[i][:s-1]
                 if wt != -1:
                     a = B[i][:wt-1]
+            a = a.rstrip()
+            if a[-1] == ',':
+                a = a[:-1]
             if a not in dt:
                 dt[a] = player(a)
             mark = a
@@ -314,9 +276,6 @@ def Balling(B,dt):
             else:
                 dt[mark].eco,dt[mark].dot = float(temp[0]),int(temp[1])
 
-# Balling(array)
-# for i in dt:
-#     print(dt[i].name+'#',dt[i].eco)
 
 def Fielding(dt,res):
     for i in res:
@@ -331,17 +290,17 @@ def Fielding(dt,res):
                 elif w == 'dro': dt[j].dro += 1
                 else: dt[j].rro += 1
 
-def StatsFinder(a,dct):
+
+def StatsFinder(url,a,dct):
     dt = {}
     res = []
+    array = webParser(url)
     Batting(array[0],dt,res)
     Batting(array[2],dt,res)
     Balling(array[1],dt)
     Balling(array[3],dt)
     Fielding(dt,res)
-    u = dt['Josh Little']
-    print(u.name,u.r,u.eco,u.w,u.bwl,u.o)
-    print(len(dt))
+    print(dt)
     sheet = pd.read_excel(r"C:\Users\chira\PycharmProjects\Dream11_Agam_Gupta\Player's Data\{}.xlsx".format(a))
     player_score = {}
     CodeNameToScr = {}
@@ -356,15 +315,31 @@ def StatsFinder(a,dct):
         pickle.dump(player_score, myDct)
     myDct.close()
 
-    with open(r'C:\Users\chira\PycharmProjects\Dream11_Agam_Gupta\Output Files\Players score Dict\CodeNameToScr', "wb") as dfct:
+    with open(r'C:\Users\chira\PycharmProjects\Dream11_Agam_Gupta\Output Files\Players score Dict\{}CodeNameToScr'.format(dct), "wb") as dfct:
         pickle.dump(CodeNameToScr, dfct)
     dfct.close()
 
     print(player_score)
     print(CodeNameToScr)
 
-
-StatsFinder('INDvsIREwebscrap', 'IvsZ')
+# def StatsFinder(url):
+#     dt = {}
+#     res = []
+#     array = webParser(url)
+#     Batting(array[0],dt,res)
+#     Batting(array[2],dt,res)
+#     Balling(array[1],dt)
+#     Balling(array[3],dt)
+#     Fielding(dt,res)
+#     pl = {}
+#     for i in dt:
+#         pl[dt[i].name] = dt[i].cal_score()
+#         print(i,pl[i])
+#
+a = 'INDvsPAKwebscrap'
+dct = 'INDvsPAK_GR'
+url = 'https://www.espncricinfo.com/series/india-in-united-arab-emirates-2022-1327266/india-vs-pakistan-2nd-match-group-a-1327270/full-scorecard'
+StatsFinder(url,a,dct)
 
 
 
