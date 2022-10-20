@@ -56,16 +56,40 @@ if c == "y":
                         ############# customized for INd vd Ire ################
 
                         ############ for IND vs PAK #############
+                        # for j in range(0,22,2):
+                        #     if temp[j].find('Lokesh') != -1:
+                        #         temp[j] = 'KL '
+                        #         players.append(temp[j]+temp[j+1])
+                        #     elif temp[j].find('Iftikhar') != -1:
+                        #         temp[j] = 'Iftikhar '
+                        #         players.append(temp[j]+temp[j+1])
+                        #     else:
+                        #         players.append(temp[j]+temp[j+1])
+                        ############ for IND vs PAK #############
+
+                        ############ for IND vs SL #############
                         for j in range(0,22,2):
                             if temp[j].find('Lokesh') != -1:
                                 temp[j] = 'KL '
                                 players.append(temp[j]+temp[j+1])
-                            elif temp[j].find('Iftikhar') != -1:
-                                temp[j] = 'Iftikhar '
+                            elif temp[j].find('Wanindu') != -1:
+                                players.append(temp[j]+temp[j+1] + ' de' + ' Silva')
+                            else:
+                                players.append(temp[j]+temp[j+1])
+                        ############ for IND vs SL #############
+
+                        ############ for IND vs HK #############
+                        for j in range(0,22,2):
+                            if temp[j].find('Lokesh') != -1:
+                                temp[j] = 'KL '
+                                players.append(temp[j]+temp[j+1])
+                            elif temp[j].find('Scott') != -1:
+                                temp[j+1] = 'McKechnie'
                                 players.append(temp[j]+temp[j+1])
                             else:
                                 players.append(temp[j]+temp[j+1])
-                        ############ for IND vs PAK #############
+
+                        ############ for IND vs HK #############
 
                         entry = []
                         for i in range(11):
@@ -102,7 +126,7 @@ if c == "y":
         file.close()
 
     df = pd.DataFrame(teams_list)
-    df.to_csv(r"C:\Users\chira\PycharmProjects\Dream11_Agam_Gupta\Output Files\CSV\{}".format(real_filename))
+    df.to_csv(r"C:\Users\chira\PycharmProjects\Dream11_Agam_Gupta\Output Files\CSV\{}_Real.csv".format(real_filename))
     print('Calculated scores for real teams.\n')
 
 else:
