@@ -6,7 +6,6 @@ random_filename = input("Enter a file name for random teams csv.\n")
 c = input("You want to build the random teams' csv again?\n")
 
 if c == "y":
-
     b = input("Enter tha name for the dictionary.\n")
     with open(r'C:\Users\chira\PycharmProjects\Dream11_Agam_Gupta\Output Files\Players score Dict\{}'.format(b), "rb") as myFile:
         players_score = pickle.load(myFile)
@@ -49,7 +48,7 @@ if c == "y":
                 row_add(teams_list, i, j)
 
     df = pd.DataFrame(teams_list)
-    df.to_csv(r"C:\Users\chira\PycharmProjects\Dream11_Agam_Gupta\Output Files\CSV\{}".format(random_filename))
+    df.to_csv(r"C:\Users\chira\PycharmProjects\Dream11_Agam_Gupta\Output Files\CSV\{}_Random.csv".format(random_filename))
     print('Calculated scores for random teams.\n')
 
 else:

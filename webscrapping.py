@@ -291,22 +291,32 @@ def Fielding(dt,res):
                 else: dt[j].rro += 1
 
 
-def StatsFinder(url,a,dct):
-    dt = {}
-    res = []
-    array = webParser(url)
-    Batting(array[0],dt,res)
-    Batting(array[2],dt,res)
-    Balling(array[1],dt)
-    Balling(array[3],dt)
-    Fielding(dt,res)
-    print(dt)
-    sheet = pd.read_excel(r"C:\Users\chira\PycharmProjects\Dream11_Agam_Gupta\Player's Data\{}.xlsx".format(a))
+def StatsFinder(url,a,sitedct,dct,x):
+    if x == 'y':
+        dt = {}
+        res = []
+        array = webParser(url)
+        Batting(array[0],dt,res)
+        Batting(array[2],dt,res)
+        Balling(array[1],dt)
+        Balling(array[3],dt)
+        Fielding(dt,res)
+        sheet = pd.read_excel(r"C:\Users\chira\PycharmProjects\Dream11_Agam_Gupta\Player's Data\{}.xlsx".format(a))
+        for index,row in sheet.iterrows():
+            nam = row[sheet.columns[0]]
+            dt[nam].code_name,dt[nam].house,dt[nam].profile,dt[nam].credit = row[sheet.columns[1]],row[sheet.columns[2]],row[sheet.columns[3]],row[sheet.columns[4]]
+
+        with open(r'C:\Users\chira\PycharmProjects\Dream11_Agam_Gupta\Output Files\Players score Dict\{}'.format(sitedct), "wb") as myDcty:
+            pickle.dump(dt, myDcty)
+        myDcty.close()
+
+    with open(r'C:\Users\chira\PycharmProjects\Dream11_Agam_Gupta\Output Files\Players score Dict\{}'.format(sitedct), "rb") as myFile:
+        dt = pickle.load(myFile)
+    myFile.close()
+
     player_score = {}
     CodeNameToScr = {}
-    for index,row in sheet.iterrows():
-        nam = row[sheet.columns[0]]
-        dt[nam].code_name,dt[nam].house,dt[nam].profile,dt[nam].credit = row[sheet.columns[1]],row[sheet.columns[2]],row[sheet.columns[3]],row[sheet.columns[4]]
+    for nam in dt:
         scr = dt[nam].cal_score()
         player_score[nam] = [dt[nam].house, dt[nam].profile, dt[nam].credit,scr, dt[nam].code_name]
         CodeNameToScr[dt[nam].code_name] = scr
@@ -322,7 +332,7 @@ def StatsFinder(url,a,dct):
     print(player_score)
     print(CodeNameToScr)
 
-# def StatsFinder(url):
+# def StatsFinder(url,a,dct):
 #     dt = {}
 #     res = []
 #     array = webParser(url)
@@ -331,15 +341,35 @@ def StatsFinder(url,a,dct):
 #     Balling(array[1],dt)
 #     Balling(array[3],dt)
 #     Fielding(dt,res)
-#     pl = {}
-#     for i in dt:
-#         pl[dt[i].name] = dt[i].cal_score()
-#         print(i,pl[i])
+#     player_score = {}
+#     CodeNameToScr = {}
+#     sheet = pd.read_excel(r"C:\Users\chira\PycharmProjects\Dream11_Agam_Gupta\Player's Data\{}.xlsx".format(a))
+#     for index,row in sheet.iterrows():
+#         nam = row[sheet.columns[0]]
+#         dt[nam].code_name,dt[nam].house,dt[nam].profile,dt[nam].credit = row[sheet.columns[1]],row[sheet.columns[2]],row[sheet.columns[3]],row[sheet.columns[4]]
+#         scr = dt[nam].cal_score()
+#         player_score[nam] = [dt[nam].house, dt[nam].profile, dt[nam].credit,scr, dt[nam].code_name]
+#         CodeNameToScr[dt[nam].code_name] = scr
 #
-a = 'INDvsPAKwebscrap'
-dct = 'INDvsPAK_GR'
+#     with open(r'C:\Users\chira\PycharmProjects\Dream11_Agam_Gupta\Output Files\Players score Dict\{}'.format(dct), "wb") as myDct:
+#         pickle.dump(player_score, myDct)
+#     myDct.close()
+#
+#     with open(r'C:\Users\chira\PycharmProjects\Dream11_Agam_Gupta\Output Files\Players score Dict\{}CodeNameToScr'.format(dct), "wb") as dfct:
+#         pickle.dump(CodeNameToScr, dfct)
+#     dfct.close()
+#
+#     print(player_score)
+#     print(CodeNameToScr)
+
+
+sitedct = 'INDvsHK_WebDct'
+a = 'INDvsHKWebscrap'
+dct = 'INDvsHK_GR'
 url = 'https://www.espncricinfo.com/series/india-in-united-arab-emirates-2022-1327266/india-vs-pakistan-2nd-match-group-a-1327270/full-scorecard'
-StatsFinder(url,a,dct)
+url2 = 'https://www.espncricinfo.com/series/sri-lanka-in-united-arab-emirates-2022-1327265/india-vs-sri-lanka-9th-match-super-four-1327277/full-scorecard'
+url3 = 'https://www.espncricinfo.com/series/india-in-united-arab-emirates-2022-1327266/hong-kong-vs-india-4th-match-group-a-1327272/full-scorecard'
+StatsFinder(url3,a,sitedct,dct,'y')
 
 
 
