@@ -68,14 +68,14 @@ if c == "y":
                         ############ for IND vs PAK #############
 
                         ############ for IND vs SL #############
-                        for j in range(0,22,2):
-                            if temp[j].find('Lokesh') != -1:
-                                temp[j] = 'KL '
-                                players.append(temp[j]+temp[j+1])
-                            elif temp[j].find('Wanindu') != -1:
-                                players.append(temp[j]+temp[j+1] + ' de' + ' Silva')
-                            else:
-                                players.append(temp[j]+temp[j+1])
+                        # for j in range(0,22,2):
+                        #     if temp[j].find('Lokesh') != -1:
+                        #         temp[j] = 'KL '
+                        #         players.append(temp[j]+temp[j+1])
+                        #     elif temp[j].find('Wanindu') != -1:
+                        #         players.append(temp[j]+temp[j+1] + ' de' + ' Silva')
+                        #     else:
+                        #         players.append(temp[j]+temp[j+1])
                         ############ for IND vs SL #############
 
                         ############ for IND vs HK #############

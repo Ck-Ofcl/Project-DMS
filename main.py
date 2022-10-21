@@ -11,8 +11,8 @@ Real_teams = pd.read_csv(r'C:\Users\chira\PycharmProjects\Dream11_Agam_Gupta\Out
 w = 5
 a = 0
 b = int(max(max(Random_teams['Score']), max(Real_teams['Score']))) + 1
-plt.hist(Random_teams['Score'],color = 'pink',bins = range(a, b+w, w),label = 'Random Teams',weights=np.ones(35571470)/35571470,alpha = 0.8)
-plt.hist(Real_teams['Score'],color = 'violet',bins = range(a, b+w, w),label = 'Real Teams',weights=np.ones(2735042)/2735042,alpha = 0.8)
+plt.hist(Random_teams['Score'],color = 'pink',bins = range(a, b+w, w),label = 'Random Teams',weights=np.ones(39446000)/39446000,alpha = 0.8)
+plt.hist(Real_teams['Score'],color = 'violet',bins = range(a, b+w, w),label = 'Real Teams',weights=np.ones(938002)/938002,alpha = 0.8)
 plt.xlim([0,b+50])
 # plt.ylim([0,1000000])
 plt.title("Dream 11: IND vs IRE")

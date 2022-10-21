@@ -369,7 +369,7 @@ dct = 'INDvsHK_GR'
 url = 'https://www.espncricinfo.com/series/india-in-united-arab-emirates-2022-1327266/india-vs-pakistan-2nd-match-group-a-1327270/full-scorecard'
 url2 = 'https://www.espncricinfo.com/series/sri-lanka-in-united-arab-emirates-2022-1327265/india-vs-sri-lanka-9th-match-super-four-1327277/full-scorecard'
 url3 = 'https://www.espncricinfo.com/series/india-in-united-arab-emirates-2022-1327266/hong-kong-vs-india-4th-match-group-a-1327272/full-scorecard'
-StatsFinder(url3,a,sitedct,dct,'y')
+StatsFinder(url3,a,sitedct,dct,'n')
 
 
 
